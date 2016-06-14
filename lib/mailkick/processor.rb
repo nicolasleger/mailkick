@@ -20,7 +20,8 @@ module Mailkick
 
       parts = message.parts.any? ? message.parts : [message]
       parts.each do |part|
-        part.body.raw_source = part.body.raw_source.gsub(/%7B%7BMAILKICK_TOKEN%7D%7D/, CGI.escape(token))
+        # Avoid Frozen String change and private update method
+        part.body.send(:raw_source, part.body.raw_source.gsub(/%7B%7BMAILKICK_TOKEN%7D%7D/, CGI.escape(token)))
       end
     end
   end
